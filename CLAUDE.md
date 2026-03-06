@@ -6,6 +6,9 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 > **ALWAYS** — 코드를 생성하기 전에 `/docs` 디렉토리 내의 관련 문서 파일을 **반드시** 먼저 확인한다. 해당 기능이나 컴포넌트와 관련된 문서가 있다면, 그 문서의 규칙과 패턴을 코드에 적용해야 한다.
 
+- docs/ui.md
+- docs/data-fetching.md
+
 ## Commands
 
 ```bash
