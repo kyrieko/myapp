@@ -10,7 +10,10 @@
       "Bash(npx shadcn@latest:*)",
       "Bash(npm run:*)",
       "Bash(node:*)",
-      "Bash(npx tsc:*)"
+      "Bash(npx tsc:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(git:*)"
     ]
   },
   "enableAllProjectMcpServers": true,

@@ -10,6 +10,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - docs/data-fetching.md
 - docs/auth.md
 - docs/data-mutation.md
+- docs/routing.md
 
 ## Commands
 
