@@ -1,3 +1,4 @@
+import Link from "next/link"
 import { format } from "date-fns"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import DatePicker from "./DatePicker"
@@ -51,7 +52,8 @@ export default async function DashboardPage({ searchParams }: PageProps) {
         ) : (
           <div className="flex flex-col gap-4">
             {workouts.map((workout) => (
-              <Card key={workout.id}>
+              <Link key={workout.id} href={`/dashboard/workout/${workout.id}`}>
+              <Card className="hover:bg-muted/50 transition-colors cursor-pointer">
                 <CardHeader className="pb-2">
                   <CardTitle className="text-base">{workout.name}</CardTitle>
                 </CardHeader>
@@ -76,6 +78,7 @@ export default async function DashboardPage({ searchParams }: PageProps) {
                   </ul>
                 </CardContent>
               </Card>
+              </Link>
             ))}
           </div>
         )}
