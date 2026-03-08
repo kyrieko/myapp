@@ -3,6 +3,71 @@ import { db } from "@/index"
 import { workouts, workoutExercises, exercises, sets } from "@/db/schema"
 import { eq, and } from "drizzle-orm"
 
+export async function getWorkoutWithExercisesAndSets(id: number) {
+  const { userId } = await auth()
+  if (!userId) throw new Error("Unauthorized")
+
+  const rows = await db
+    .select({
+      workout: workouts,
+      workoutExerciseId: workoutExercises.id,
+      exerciseId: exercises.id,
+      exerciseName: exercises.name,
+      order: workoutExercises.order,
+      setId: sets.id,
+      setNumber: sets.setNumber,
+      reps: sets.reps,
+      weight: sets.weight,
+    })
+    .from(workouts)
+    .leftJoin(workoutExercises, eq(workoutExercises.workoutId, workouts.id))
+    .leftJoin(exercises, eq(exercises.id, workoutExercises.exerciseId))
+    .leftJoin(sets, eq(sets.workoutExerciseId, workoutExercises.id))
+    .where(and(eq(workouts.id, id), eq(workouts.userId, userId)))
+    .orderBy(workoutExercises.order, sets.setNumber)
+
+  if (rows.length === 0) throw new Error("Not found")
+
+  const workout = rows[0].workout
+
+  // 평탄한 행을 중첩 구조로 변환
+  const exerciseMap = new Map<number, {
+    workoutExerciseId: number
+    exerciseId: number
+    exerciseName: string
+    order: number | null
+    sets: Array<{ id: number; setNumber: number | null; reps: number | null; weight: string | null }>
+  }>()
+
+  for (const row of rows) {
+    if (row.workoutExerciseId === null || row.exerciseName === null || row.exerciseId === null) continue
+
+    if (!exerciseMap.has(row.workoutExerciseId)) {
+      exerciseMap.set(row.workoutExerciseId, {
+        workoutExerciseId: row.workoutExerciseId,
+        exerciseId: row.exerciseId,
+        exerciseName: row.exerciseName,
+        order: row.order,
+        sets: [],
+      })
+    }
+
+    if (row.setId !== null) {
+      exerciseMap.get(row.workoutExerciseId)!.sets.push({
+        id: row.setId,
+        setNumber: row.setNumber,
+        reps: row.reps,
+        weight: row.weight,
+      })
+    }
+  }
+
+  return {
+    workout,
+    exercises: Array.from(exerciseMap.values()),
+  }
+}
+
 export async function getWorkoutById(id: number) {
   const { userId } = await auth()
   if (!userId) throw new Error("Unauthorized")
