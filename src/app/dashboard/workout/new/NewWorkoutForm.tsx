@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
 import { format } from "date-fns"
 import { Button } from "@/components/ui/button"
@@ -15,10 +15,17 @@ interface NewWorkoutFormProps {
 export function NewWorkoutForm({ initialDate }: NewWorkoutFormProps) {
   const [name, setName] = useState("")
   const [datetime, setDatetime] = useState(
-    initialDate
-      ? `${initialDate}T${format(new Date(), "HH:mm")}`
-      : format(new Date(), "yyyy-MM-dd'T'HH:mm")
+    initialDate ? `${initialDate}T00:00` : ""
   )
+
+  useEffect(() => {
+    const now = new Date()
+    setDatetime(
+      initialDate
+        ? `${initialDate}T${format(now, "HH:mm")}`
+        : format(now, "yyyy-MM-dd'T'HH:mm")
+    )
+  }, [])
   const [isPending, setIsPending] = useState(false)
 
   async function handleSubmit(e: React.FormEvent) {

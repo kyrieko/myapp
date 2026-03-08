@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { format } from "date-fns"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -15,8 +15,14 @@ interface EditWorkoutFormProps {
 export function EditWorkoutForm({ workout }: EditWorkoutFormProps) {
   const [name, setName] = useState(workout.name)
   const [datetime, setDatetime] = useState(
-    workout.date ? format(new Date(workout.date), "yyyy-MM-dd'T'HH:mm") : format(new Date(), "yyyy-MM-dd'T'HH:mm")
+    workout.date ? format(new Date(workout.date), "yyyy-MM-dd'T'HH:mm") : ""
   )
+
+  useEffect(() => {
+    if (!workout.date) {
+      setDatetime(format(new Date(), "yyyy-MM-dd'T'HH:mm"))
+    }
+  }, [])
   const [isPending, setIsPending] = useState(false)
 
   async function handleSubmit(e: React.FormEvent) {
