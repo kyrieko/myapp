@@ -8,9 +8,17 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { createWorkoutAction } from "./actions"
 
-export function NewWorkoutForm() {
+interface NewWorkoutFormProps {
+  initialDate?: string
+}
+
+export function NewWorkoutForm({ initialDate }: NewWorkoutFormProps) {
   const [name, setName] = useState("")
-  const [datetime, setDatetime] = useState(format(new Date(), "yyyy-MM-dd'T'HH:mm"))
+  const [datetime, setDatetime] = useState(
+    initialDate
+      ? `${initialDate}T${format(new Date(), "HH:mm")}`
+      : format(new Date(), "yyyy-MM-dd'T'HH:mm")
+  )
   const [isPending, setIsPending] = useState(false)
 
   async function handleSubmit(e: React.FormEvent) {

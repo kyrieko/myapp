@@ -1,6 +1,8 @@
 import Link from "next/link"
 import { format } from "date-fns"
+import { Plus } from "lucide-react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Button } from "@/components/ui/button"
 import DatePicker from "./DatePicker"
 import { getWorkoutsForDate } from "@/data/workouts"
 
@@ -43,9 +45,17 @@ export default async function DashboardPage({ searchParams }: PageProps) {
 
       {/* 운동 목록 */}
       <section>
-        <h2 className="mb-4 text-lg font-semibold">
-          {formatDate(selectedDate)} 운동 기록
-        </h2>
+        <div className="mb-4 flex items-center justify-between">
+          <h2 className="text-lg font-semibold">
+            {formatDate(selectedDate)} 운동 기록
+          </h2>
+          <Button asChild size="sm">
+            <Link href={`/dashboard/workout/new?date=${dateString}`}>
+              <Plus className="h-4 w-4" />
+              운동 추가
+            </Link>
+          </Button>
+        </div>
 
         {workouts.length === 0 ? (
           <p className="text-sm text-muted-foreground">이 날 기록된 운동이 없습니다.</p>
