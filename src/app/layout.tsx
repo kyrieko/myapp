@@ -9,6 +9,7 @@ import {
 } from "@clerk/nextjs";
 import { Geist, Geist_Mono } from "next/font/google";
 import { Button } from "@/components/ui/button";
+import { ThemeToggle } from "@/components/theme-toggle";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -34,10 +35,18 @@ export default function RootLayout({
   return (
     <ClerkProvider>
       <html lang="en" className="dark">
+        <head>
+          <script
+            dangerouslySetInnerHTML={{
+              __html: `(function(){var t=localStorage.getItem('theme');if(t==='light'){document.documentElement.classList.remove('dark')}else{document.documentElement.classList.add('dark')}})()`,
+            }}
+          />
+        </head>
         <body
           className={`${geistSans.variable} ${geistMono.variable} antialiased`}
         >
           <header className="flex items-center justify-end gap-4 p-4">
+            <ThemeToggle />
             <SignedOut>
               <SignInButton mode="modal">
                 <Button variant="outline">Sign in</Button>
