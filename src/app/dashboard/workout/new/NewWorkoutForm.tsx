@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
+import Link from "next/link"
 import { format } from "date-fns"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -63,9 +64,14 @@ export function NewWorkoutForm({ initialDate }: NewWorkoutFormProps) {
         />
       </div>
 
-      <Button type="submit" disabled={isPending}>
-        {isPending ? "저장 중..." : "운동 만들기"}
-      </Button>
+      <div className="flex gap-2">
+        <Button type="submit" disabled={isPending} className="flex-1">
+          {isPending ? "저장 중..." : "운동 만들기"}
+        </Button>
+        <Button type="button" variant="outline" asChild>
+          <Link href="/dashboard">취소</Link>
+        </Button>
+      </div>
     </form>
   )
 }
